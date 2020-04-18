@@ -1,3 +1,5 @@
+
+
 class CursoModel {
   int id;
   String nome;
@@ -6,5 +8,12 @@ class CursoModel {
   int preco;
   String conteudo;
 
-  CursoModel({this.id, this.nome, this.nivel, this.percentualConclusao, this.preco, this.conteudo});
+  CursoModel({
+    this.id,
+    this.nome,
+    this.nivel,
+    this.percentualConclusao,
+    this.preco,
+    this.conteudo,
+  });
 }

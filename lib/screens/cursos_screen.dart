@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
 import 'package:lista_cursos/repository/curso_repository.dart';
+import 'package:lista_cursos/screens/cursos_detalhes_screen.dart';
 
 class CursosScreen extends StatefulWidget {
   @override
@@ -17,34 +17,40 @@ class _CursosScreenState extends State<CursosScreen> {
         title: Text("Cursos"),
       ),
       body: FutureBuilder<List<CursoModel>>(
-          future: CursoRepository().findAllAsync(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return new Text('Error: ${snapshot.error}');
-            }
-
-            if (snapshot.connectionState == ConnectionState.done) {
-              // Dados retornados pela future ficam armazenados em snapshot
-              return buildListView(snapshot.data);
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+        future: CursoRepository().findAllAsync(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return buildListView(snapshot.data);
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_forward),
+        backgroundColor: Color.fromRGBO(64, 75, 96, .9),
+        onPressed: () {
+          // Navegar para detalhes
+          Navigator.pushNamed(context, "/cursos_detalhes",
+              arguments: new CursoModel(id: 10, nome: "Dez"));
+        },
+      ),
     );
   }
 
   ListView buildListView(List<CursoModel> cursos) {
     return ListView.builder(
       itemCount: cursos == null ? 0 : cursos.length,
+      //itemCount: cursos.length,
       itemBuilder: (BuildContext ctx, int index) {
         return cardCurso(cursos[index]);
       },
     );
   }
 
-  Widget cardCurso(CursoModel listaCurso) {
+  Card cardCurso(CursoModel curso) {
     return Card(
       elevation: 12.0,
       margin: new EdgeInsets.symmetric(
@@ -74,7 +80,7 @@ class _CursosScreenState extends State<CursosScreen> {
             ),
           ),
           title: Text(
-            listaCurso.nome,
+            curso.nome,
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -87,7 +93,7 @@ class _CursosScreenState extends State<CursosScreen> {
                 child: Container(
                   child: LinearProgressIndicator(
                     backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
-                    value: listaCurso.percentualConclusao,
+                    value: curso.percentualConclusao,
                     valueColor: AlwaysStoppedAnimation(Colors.green),
                   ),
                 ),
@@ -97,7 +103,7 @@ class _CursosScreenState extends State<CursosScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 10.0),
                   child: Text(
-                    listaCurso.nivel,
+                    curso.nivel,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -111,9 +117,17 @@ class _CursosScreenState extends State<CursosScreen> {
           ),
           onTap: () {
             print('Navegar');
+            navegarParaDetalhes(curso);
           },
         ),
       ),
     );
+  }
+
+  void navegarParaDetalhes(CursoModel curso) async {
+    var retorno = await Navigator.pushNamed(context, "/cursos_detalhes",
+        arguments: curso);
+
+        print(retorno);
   }
 }

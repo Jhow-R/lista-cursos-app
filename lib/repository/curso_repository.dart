@@ -2,33 +2,8 @@ import 'package:lista_cursos/models/curso_model.dart';
 
 import 'database.dart';
 
-// SELECT, INSERT, UPDATE, DELETE
 class CursoRepository {
-  
-  List<CursoModel> findAll() {
-    List<CursoModel> lista = <CursoModel>[
-      new CursoModel(
-          id: 1,
-          nome: 'Delphi 1',
-          nivel: 'Ultra Avancado',
-          percentualConclusao: 0.7,
-          preco: 1000),
-      new CursoModel(
-          id: 2,
-          nome: 'Delphi 2',
-          nivel: 'Ultra Avancado',
-          percentualConclusao: 0.7,
-          preco: 1000),
-      new CursoModel(
-          id: 3,
-          nome: 'Delphi 3',
-          nivel: 'Ultra Avancado',
-          percentualConclusao: 0.7,
-          preco: 1000)
-    ];
 
-    return lista;
-  }
 
   Future<List<CursoModel>> findAllAsync() async {
     var db = Database();
@@ -40,31 +15,52 @@ class CursoRepository {
       cursos = new List<CursoModel>();
       cursos.add(
         new CursoModel(
-            id: 1,
-            nome: 'Java',
-            nivel: 'Básico',
-            percentualConclusao: 99,
-            preco: 1000),
+          id: 1,
+          nome: 'Java',
+          nivel: 'Básico',
+          percentualConclusao: 0.7,
+          preco: 599,
+          conteudo:
+              'Lorem ipsum dolor sit amet. Commodo blandit. Morbi commodo sed ante eu eleifend. Aliquam erat volutpat. Nam ullamcorper diam lectus, a dictum tellus pellentesque a. Nam velit ligula, porttitor ac dictum nec, commodo quis ante. Pellentesque luctus libero nulla, eu tristique erat iaculis eu.',
+        ),
+      );
+      cursos.add(
+        CursoModel(
+          id: 2,
+          nome: 'C#',
+          nivel: 'Básico',
+          percentualConclusao: 0.25,
+          preco: 399,
+          conteudo:
+              'Lorem ipsum dolor sit amet. Commodo blandit. Morbi commodo sed ante eu eleifend. Aliquam erat volutpat. Nam ullamcorper diam lectus, a dictum tellus pellentesque a. Nam velit ligula, porttitor ac dictum nec, commodo quis ante. Pellentesque luctus libero nulla, eu tristique erat iaculis eu.',
+        ),
+      );
+      cursos.add(
+        CursoModel(
+          id: 3,
+          nome: 'Node JS',
+          nivel: 'Básico',
+          percentualConclusao: 0.9,
+          preco: 799,
+          conteudo:
+              'Lorem ipsum dolor sit amet. Commodo blandit. Morbi commodo sed ante eu eleifend. Aliquam erat volutpat. Nam ullamcorper diam lectus, a dictum tellus pellentesque a. Nam velit ligula, porttitor ac dictum nec, commodo quis ante. Pellentesque luctus libero nulla, eu tristique erat iaculis eu.',
+        ),
+      );
+      cursos.add(
+        CursoModel(
+          id: 4,
+          nome: 'GO Lang',
+          nivel: 'Básico',
+          percentualConclusao: 0.1,
+          preco: 1799,
+          conteudo:
+              'Lorem ipsum dolor sit amet. Commodo blandit. Morbi commodo sed ante eu eleifend. Aliquam erat volutpat. Nam ullamcorper diam lectus, a dictum tellus pellentesque a. Nam velit ligula, porttitor ac dictum nec, commodo quis ante. Pellentesque luctus libero nulla, eu tristique erat iaculis eu.',
+        ),
       );
 
-      cursos.add(
-        new CursoModel(
-            id: 1,
-            nome: 'Java',
-            nivel: 'Básico',
-            percentualConclusao: 99,
-            preco: 1000),
-      );
-
-      cursos.add(
-        new CursoModel(
-            id: 1,
-            nome: 'Java',
-            nivel: 'Básico',
-            percentualConclusao: 99,
-            preco: 1000),
-      );
     }
+
     return new Future.value(cursos);
   }
+
 }
