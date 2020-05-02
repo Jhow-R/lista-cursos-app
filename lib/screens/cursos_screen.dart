@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
 import 'package:lista_cursos/repository/curso_repository.dart';
-import 'package:lista_cursos/screens/cursos_detalhes_screen.dart';
 
 class CursosScreen extends StatefulWidget {
   @override
@@ -9,9 +8,13 @@ class CursosScreen extends StatefulWidget {
 }
 
 class _CursosScreenState extends State<CursosScreen> {
+  // Instância para exibir um SnackBar na tela
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(64, 75, 96, .9),
         title: Text("Cursos"),
@@ -29,17 +32,25 @@ class _CursosScreenState extends State<CursosScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_forward),
         backgroundColor: Color.fromRGBO(64, 75, 96, .9),
-        onPressed: () {
-          // Navegar para detalhes
-          Navigator.pushNamed(context, "/cursos_detalhes",
-              arguments: new CursoModel(id: 10, nome: "Dez"));
+        child: Icon(Icons.add),
+        onPressed: () async {
+          var retorno = await Navigator.pushNamed(context, "/cursos_novo");
+
+          if (retorno != null) {
+            // Atualizar a tela
+            setState(() {});
+
+            scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text(retorno.toString()),
+            ));
+          }
         },
       ),
     );
   }
 
+  // Cria a lista de Cards de acordo com os cursos no Repository
   ListView buildListView(List<CursoModel> cursos) {
     return ListView.builder(
       itemCount: cursos == null ? 0 : cursos.length,
@@ -50,6 +61,7 @@ class _CursosScreenState extends State<CursosScreen> {
     );
   }
 
+  // Retorna os cards para os cartões
   Card cardCurso(CursoModel curso) {
     return Card(
       elevation: 12.0,
@@ -124,10 +136,11 @@ class _CursosScreenState extends State<CursosScreen> {
     );
   }
 
+  // Navegação para a tela de detalhes do curso
   void navegarParaDetalhes(CursoModel curso) async {
     var retorno = await Navigator.pushNamed(context, "/cursos_detalhes",
         arguments: curso);
 
-        print(retorno);
+    print(retorno);
   }
 }
