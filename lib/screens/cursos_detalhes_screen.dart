@@ -2,10 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
 
-class CursosDetalhesScreen extends StatelessWidget {
+class CursosDetalhesScreen extends StatefulWidget {
+  @override
+  _CursosDetalhesScreenState createState() => _CursosDetalhesScreenState();
+}
+
+class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
   @override
   Widget build(BuildContext context) {
     CursoModel cursoModel = ModalRoute.of(context).settings.arguments;
+    GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
     // INDICADOR DE NÍVEL
     final levelIndicator = Container(
@@ -130,21 +136,33 @@ class CursosDetalhesScreen extends StatelessWidget {
       textAlign: TextAlign.justify,
     );
 
-    // BOTÃO DE INTERESSE
-    final readButton = Container(
+    // BOTÃO DE EDITAR
+    final editButton = Container(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       width: MediaQuery.of(context).size.width,
       child: RaisedButton(
-        onPressed: () => {},
         color: Color.fromRGBO(58, 66, 86, 1.0),
         child: Text(
-          "Tenho interesse!",
+          "Editar",
           style: TextStyle(color: Colors.white),
         ),
+        onPressed: () async {
+          var retorno = await Navigator.pushNamed(context, "/cursos_editar",
+        arguments: cursoModel);
+
+          if (retorno != null) {
+            // Atualizar a tela
+            setState(() {});
+
+            scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text(retorno.toString()),
+            ));
+          }
+        },
       ),
     );
 
-    // CONTEÚDO INFERIOR: DESCRIÇÃO DO CURSO + BOTÃO DE INTERESSE
+    // CONTEÚDO INFERIOR: DESCRIÇÃO DO CURSO + BOTÃO DE EDITAR
     final bottomContent = Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.all(40.0),
@@ -152,13 +170,14 @@ class CursosDetalhesScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             bottomContentText,
-            readButton,
+            editButton,
           ],
         ),
       ),
     );
 
     return Scaffold(
+      key: scaffoldKey,
       body: Column(
         children: <Widget>[
           topContent,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_cursos/repository/curso_repository.dart';
 
 import '../models/curso_model.dart';
 
@@ -9,6 +10,8 @@ class CursosNovoScreen extends StatefulWidget {
 
 class _CursosNovoScreenState extends State<CursosNovoScreen> {
   CursoModel cursoModel = new CursoModel();
+
+  // Usa-se para fazer o SnackBar
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   // Manipula-se o formulário através dessa chave
@@ -29,6 +32,7 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
             key: formKey,
             child: Column(
               children: <Widget>[
+                
                 // NOME
                 TextFormField(
                   decoration: new InputDecoration(
@@ -39,7 +43,7 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Nome requerido';
-                    } else if (value.length < 3) {
+                    } else if (value.length < 1) {
                       return 'Nome inválido';
                     }
                     return null;
@@ -90,29 +94,34 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
                 ),
 
                 // NÍVEL
-                DropdownButtonFormField(
-                  items: ["Básico", "Inter", "Avançado"]
-                      .map(
-                        (e) => DropdownMenuItem(
-                          child: Text(e),
-                          value: e,
-                        ),
-                      )
-                      .toList(),
+                DropdownButtonFormField<String>(
+                  value: cursoModel.nivel,
+                  items:
+                      ["Básico", "Intermediário", "Avançado", "Especializado"]
+                          .map((label) => DropdownMenuItem(
+                                child: Text(label),
+                                value: label,
+                              ))
+                          .toList(),
                   decoration: new InputDecoration(
+                    alignLabelWithHint: true,
                     icon: const Icon(Icons.score),
                     hintText: 'Selecione o nível',
                     labelText: 'Nível',
                   ),
                   validator: (value) {
-                    if (value == null) {
-                      return 'Selecione o nível';
+                    if ((value == null)) {
+                      return 'Selecione o nível do curso!';
                     }
-
                     return null;
                   },
-                  onChanged: (value) {
+                  onSaved: (value) {
                     cursoModel.nivel = value;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      cursoModel.nivel = value;
+                    });
                   },
                 ),
 
@@ -147,6 +156,7 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
                       formKey.currentState.save();
 
                       //Salvar o model no Repository
+                      //new CursoRepository().Insert(cursoModel);
 
                       // Fechar a tela devolvendo a mensagem de sucesso
                       Navigator.pop(context, "Curso inserido com sucesso!");

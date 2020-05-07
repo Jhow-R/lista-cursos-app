@@ -56,7 +56,29 @@ class _CursosScreenState extends State<CursosScreen> {
       itemCount: cursos == null ? 0 : cursos.length,
       //itemCount: cursos.length,
       itemBuilder: (BuildContext ctx, int index) {
-        return cardCurso(cursos[index]);
+        return Dismissible(
+          key: Key(cursos[index].id.toString()),
+          child: cardCurso(cursos[index]),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) {
+            //new cursoRepository.delete(cursos[index].id);
+            setState(() {});
+          },
+          background: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: AlignmentDirectional.centerEnd,
+              color: Colors.redAccent,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        );
       },
     );
   }

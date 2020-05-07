@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/screens/cursos_detalhes_screen.dart';
+import 'package:lista_cursos/screens/cursos_editar.dart';
 import 'package:lista_cursos/screens/cursos_novo_screen.dart';
 import 'package:lista_cursos/screens/cursos_screen.dart';
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => CursosScreen(),
         "/cursos_detalhes": (context) => CursosDetalhesScreen(),
         '/cursos_novo': (context) => CursosNovoScreen(),
+        '/cursos_editar': (context) => CursosEditarScreen(),
       },
       title: 'Cursos App',
       theme: ThemeData(
