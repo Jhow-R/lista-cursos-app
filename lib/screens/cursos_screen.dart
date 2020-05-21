@@ -9,7 +9,9 @@ class CursosScreen extends StatefulWidget {
 
 class _CursosScreenState extends State<CursosScreen> {
   // Instância para exibir um SnackBar na tela
-  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  CursoRepository cursoRepository = CursoRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,17 @@ class _CursosScreenState extends State<CursosScreen> {
         backgroundColor: Color.fromRGBO(64, 75, 96, .9),
         title: Text("Cursos"),
       ),
-      body: FutureBuilder<List<CursoModel>>(
-        future: CursoRepository().findAllAsync(),
+      body: FutureBuilder<List>(
+        future: cursoRepository.findAll(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return buildListView(snapshot.data);
+            if (snapshot.data.length > 0) {
+              return buildListView(snapshot.data);
+            } else {
+              return Center(
+                child: Text("Nenhum curso cadastrado!"),
+              );
+            }
           } else {
             return Center(
               child: CircularProgressIndicator(),
@@ -41,9 +49,11 @@ class _CursosScreenState extends State<CursosScreen> {
             // Atualizar a tela
             setState(() {});
 
-            scaffoldKey.currentState.showSnackBar(SnackBar(
-              content: Text(retorno.toString()),
-            ));
+            scaffoldKey.currentState.showSnackBar(
+              SnackBar(
+                content: Text(retorno),
+              ),
+            );
           }
         },
       ),
@@ -54,14 +64,14 @@ class _CursosScreenState extends State<CursosScreen> {
   ListView buildListView(List<CursoModel> cursos) {
     return ListView.builder(
       itemCount: cursos == null ? 0 : cursos.length,
-      //itemCount: cursos.length,
       itemBuilder: (BuildContext ctx, int index) {
         return Dismissible(
           key: Key(cursos[index].id.toString()),
           child: cardCurso(cursos[index]),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            //new cursoRepository.delete(cursos[index].id);
+            print(direction);
+            cursoRepository.deleteRaw(cursos[index]);
             setState(() {});
           },
           background: Padding(
@@ -127,7 +137,7 @@ class _CursosScreenState extends State<CursosScreen> {
                 child: Container(
                   child: LinearProgressIndicator(
                     backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
-                    value: curso.percentualConclusao,
+                    value: (curso.percentualConclusao / 100),
                     valueColor: AlwaysStoppedAnimation(Colors.green),
                   ),
                 ),
@@ -149,20 +159,17 @@ class _CursosScreenState extends State<CursosScreen> {
             color: Colors.white,
             size: 30.0,
           ),
-          onTap: () {
-            print('Navegar');
-            navegarParaDetalhes(curso);
+          onTap: () async {
+            await Navigator.pushNamed(
+              context,
+              "/cursos_detalhes",
+              arguments: curso,
+            );
+
+            setState(() {});
           },
         ),
       ),
     );
-  }
-
-  // Navegação para a tela de detalhes do curso
-  void navegarParaDetalhes(CursoModel curso) async {
-    var retorno = await Navigator.pushNamed(context, "/cursos_detalhes",
-        arguments: curso);
-
-    print(retorno);
   }
 }

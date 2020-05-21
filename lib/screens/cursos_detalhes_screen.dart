@@ -8,10 +8,12 @@ class CursosDetalhesScreen extends StatefulWidget {
 }
 
 class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
+  CursoModel cursoModel;
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    CursoModel cursoModel = ModalRoute.of(context).settings.arguments;
-    GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+    cursoModel = ModalRoute.of(context).settings.arguments;
 
     // INDICADOR DE NÍVEL
     final levelIndicator = Container(
@@ -20,7 +22,7 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
-            value: cursoModel.percentualConclusao,
+            value: cursoModel?.percentualConclusao,
             valueColor: AlwaysStoppedAnimation(Colors.green),
           ),
         ),
@@ -36,7 +38,7 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
       ),
       child: Center(
         child: new Text(
-          "R\$ " + cursoModel.preco.toString(),
+          "R\$ " + cursoModel?.preco.toString(),
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -58,7 +60,7 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
         ),
         SizedBox(height: 10.0),
         Text(
-          cursoModel.nome,
+          cursoModel?.nome,
           style: TextStyle(
             color: Colors.white,
             fontSize: 45.0,
@@ -77,7 +79,7 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
               child: Padding(
                 padding: EdgeInsets.only(left: 10.0),
                 child: Text(
-                  cursoModel.nivel,
+                  cursoModel?.nivel,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -131,7 +133,7 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
 
     // DESCRIÇÃO DO CURSO
     final bottomContentText = Text(
-      cursoModel.conteudo,
+      cursoModel?.conteudo,
       style: TextStyle(fontSize: 18.0),
       textAlign: TextAlign.justify,
     );
@@ -148,15 +150,20 @@ class _CursosDetalhesScreenState extends State<CursosDetalhesScreen> {
         ),
         onPressed: () async {
           var retorno = await Navigator.pushNamed(context, "/cursos_editar",
-        arguments: cursoModel);
+              arguments: cursoModel);
 
           if (retorno != null) {
-            // Atualizar a tela
+            cursoModel = retorno as CursoModel;
+
             setState(() {});
 
-            scaffoldKey.currentState.showSnackBar(SnackBar(
-              content: Text(retorno.toString()),
-            ));
+            scaffoldKey.currentState.showSnackBar(
+              new SnackBar(
+                content: Text(
+                  'Curso alterado com sucesso!',
+                ),
+              ),
+            );
           }
         },
       ),

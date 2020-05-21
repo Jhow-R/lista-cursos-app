@@ -156,7 +156,7 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
                       formKey.currentState.save();
 
                       //Salvar o model no Repository
-                      //new CursoRepository().Insert(cursoModel);
+                      new CursoRepository().create(cursoModel);
 
                       // Fechar a tela devolvendo a mensagem de sucesso
                       Navigator.pop(context, "Curso inserido com sucesso!");
