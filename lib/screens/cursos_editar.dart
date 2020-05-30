@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
 import 'package:lista_cursos/repository/curso_repository.dart';
+import 'package:lista_cursos/services/CursoService.dart';
 
 class CursosEditarScreen extends StatefulWidget {
   @override
@@ -150,7 +151,8 @@ class _CursosEditarScreenState extends State<CursosEditarScreen> {
                         if (formKey.currentState.validate()) {
                           formKey.currentState.save();
 
-                          CursoRepository().updateRaw(cursoModel);
+                          //CursoRepository().updateRaw(cursoModel);
+                          new CursoService().update(cursoModel);
 
                           Navigator.pop(
                             context,

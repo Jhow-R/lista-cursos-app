@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/repository/curso_repository.dart';
+import 'package:lista_cursos/services/CursoService.dart';
 
 import '../models/curso_model.dart';
 
@@ -156,7 +157,8 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
                       formKey.currentState.save();
 
                       //Salvar o model no Repository
-                      new CursoRepository().create(cursoModel);
+                      //new CursoRepository().create(cursoModel);
+                      new CursoService().create(cursoModel);
 
                       // Fechar a tela devolvendo a mensagem de sucesso
                       Navigator.pop(context, "Curso inserido com sucesso!");

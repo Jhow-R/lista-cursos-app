@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
 import 'package:lista_cursos/repository/curso_repository.dart';
+import 'package:lista_cursos/services/CursoService.dart';
 
 class CursosScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _CursosScreenState extends State<CursosScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   CursoRepository cursoRepository = CursoRepository();
+  CursoService cursoService = CursoService();
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +24,32 @@ class _CursosScreenState extends State<CursosScreen> {
         title: Text("Cursos"),
       ),
       body: FutureBuilder<List>(
-        future: cursoRepository.findAll(),
+        //future: cursoRepository.findAll(),
+        future: cursoService.findAll(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data.length > 0) {
-              return buildListView(snapshot.data);
+          if (snapshot.hasError) {
+            String erroMessage = snapshot.error.toString();
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    'Erro ao carregar a lista de cursos. \n Detalhes: $erroMessage'),
+              ),
+            );
+          } else {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data.length > 0) {
+                return buildListView(snapshot.data);
+              } else {
+                return Center(
+                  child: Text("Nenhum curso cadastrado!"),
+                );
+              }
             } else {
               return Center(
-                child: Text("Nenhum curso cadastrado!"),
+                child: CircularProgressIndicator(),
               );
             }
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
           }
         },
       ),
@@ -71,7 +85,8 @@ class _CursosScreenState extends State<CursosScreen> {
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
             print(direction);
-            cursoRepository.deleteRaw(cursos[index]);
+            //cursoRepository.deleteRaw(cursos[index]);
+            new CursoService().delete(cursos[index]);
             setState(() {});
           },
           background: Padding(
