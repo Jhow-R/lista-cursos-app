@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lista_cursos/models/curso_model.dart';
-import 'package:lista_cursos/repository/curso_repository.dart';
 import 'package:lista_cursos/services/CursoService.dart';
 
 class CursosEditarScreen extends StatefulWidget {
@@ -28,7 +27,6 @@ class _CursosEditarScreenState extends State<CursosEditarScreen> {
             child: Center(
               child: Column(
                 children: <Widget>[
-
                   // NOME
                   TextFormField(
                     initialValue: cursoModel.nome,
@@ -49,8 +47,8 @@ class _CursosEditarScreenState extends State<CursosEditarScreen> {
                   ),
 
                   // PREÇO
-                  TextFormField(                    
-                    initialValue: cursoModel.preco.toString() ,
+                  TextFormField(
+                    initialValue: cursoModel.preco.toString(),
                     decoration: new InputDecoration(
                       icon: const Icon(Icons.monetization_on),
                       hintText: '999',
@@ -147,7 +145,6 @@ class _CursosEditarScreenState extends State<CursosEditarScreen> {
                     child: RaisedButton(
                       child: Text("Gravar"),
                       onPressed: () {
-
                         if (formKey.currentState.validate()) {
                           formKey.currentState.save();
 
@@ -158,7 +155,7 @@ class _CursosEditarScreenState extends State<CursosEditarScreen> {
                             context,
                             cursoModel,
                           );
-                        } 
+                        }
                       },
                     ),
                   ),

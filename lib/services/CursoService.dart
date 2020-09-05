@@ -10,6 +10,8 @@ class CursoService {
   final ServiceConfig service = new ServiceConfig(_endpoint);
 
   Future<List<CursoModel>> findAll() async {
+    await Future.delayed(Duration(seconds: 3));
+
     List<CursoModel> lista = new List<CursoModel>();
     try {
       Response response = await service.create().get(_resource);

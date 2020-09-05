@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lista_cursos/repository/curso_repository.dart';
 import 'package:lista_cursos/services/CursoService.dart';
 
 import '../models/curso_model.dart';
@@ -33,7 +32,6 @@ class _CursosNovoScreenState extends State<CursosNovoScreen> {
             key: formKey,
             child: Column(
               children: <Widget>[
-                
                 // NOME
                 TextFormField(
                   decoration: new InputDecoration(
